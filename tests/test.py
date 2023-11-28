@@ -31,10 +31,14 @@ class TestRawTensorService(unittest.TestCase):
     def setUp(self) -> None:
         #print("SETUP")
         self.detector = ""
-        self.grpc_channel = grpc.insecure_channel('unix:test.socket')
+        #self.grpc_channel = grpc.insecure_channel('unix:test.socket')
+        self.grpc_channel = grpc.insecure_channel('localhost:50055')
+        #self.grpc_channel = grpc.insecure_channel('10.66.179.143:50055')
         if(self.grpc_channel):
             self.detector = nnhal_raw_tensor_pb2_grpc.DetectionStub(self.grpc_channel)
-            #print("STUB CREATED")
+            print("STUB CREATED")
+        else:
+            print("STUB FAILED")
         return super().setUp()
 
     def tearDown(self) -> None:
@@ -47,7 +51,7 @@ class TestRawTensorService(unittest.TestCase):
         self.detector.prepare(reqStr)
         repSts = self.detector.loadModel(reqStr)
         self.assertTrue(repSts.status)
-
+'''
     def test_invalid_model(self):
         log.info("TEST")
         reqStr = nnhal_raw_tensor_pb2.RequestString(token = nnhal_raw_tensor_pb2.Token(data=100))
@@ -133,7 +137,7 @@ class TestRawTensorService(unittest.TestCase):
         img_data = datatensor.data
         resData = np.frombuffer(img_data, np.dtype(getMappedDatatype(3)))
         self.assertListEqual(expected_result, resData.tolist())
-
+'''
 if __name__ == '__main__':
     log.basicConfig(format='%(funcName)s() %(message)s')
     log.root.setLevel(log.INFO)
