@@ -27,7 +27,7 @@ def validate(args):
     assert args['interface'] in ["ovms", "ovtk"], "Invalid interface provided: " \
         + args['interface']
     #serving_model_name not validated
-    assert args['device'] in ["CPU", "AUTO", "GPU", "GPU.0", "GPU.1"], "Invalid device provided: " \
+    assert args['device'] in ["CPU", "AUTO", "GPU", "GPU.0", "GPU.1", "NPU"], "Invalid device provided: " \
         + args['device']
     assert (1 <= int(args['remote_port']) <= 65535 ), "Invalid remote_port provided: " \
         + args['remote_port']

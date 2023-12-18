@@ -61,10 +61,10 @@ class OvtkInterface(BaseInterface):
         gpu_props = {'PERFORMANCE_HINT': 'LATENCY'}
         exec_net = ''
         try:
-            if("GPU" in self.device):
-                exec_net = self.ie.compile_model(self.net, self.device, gpu_props)
-            else:
+            if("CPU" in self.device):
                 exec_net = self.ie.compile_model(self.net, self.device, cpu_props)
+            else:
+                exec_net = self.ie.compile_model(self.net, self.device, gpu_props)
         except Exception as inst:
             log.warning(inst)
             if("CPU" in self.device):

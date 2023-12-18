@@ -41,6 +41,8 @@ class Detection(nnhal_raw_tensor_pb2_grpc.DetectionServicer):
         self.vsock = vsock
         self.interface = {}
         self.shared_model_file = False
+        if(serving_model_name == 'shared'):
+            self.shared_model_file = True
 
     def prepare(self, requestStr, context):
         log.info("Preparing model " + str(requestStr.token.data))
@@ -108,7 +110,7 @@ class Detection(nnhal_raw_tensor_pb2_grpc.DetectionServicer):
             output_data_tensor.tensor_shape.extend(shape)
         end_time = datetime.datetime.now()
         duration = (end_time - start_time).total_seconds() * 1000
-        log.debug("time in ms run_detection: {} getInferResult: {}".format(serving_duration,
+        log.info("time in ms run_detection: {} getInferResult: {}".format(serving_duration,
                                                                             duration))
         return reply_data_tensor
 
@@ -147,6 +149,7 @@ def serve(detection):
         server.add_insecure_port("vsock:-1:{}".format(detection.remote_port))
     else :
         server.add_insecure_port('[::]:{}'.format(detection.remote_port))
+        log.info("TCP Port : " + str(detection.remote_port))
     server.start()
     server.wait_for_termination()
 
